@@ -28,6 +28,8 @@ def on_button():
     except:
         messagebox.showerror("Error", "It seems like the image name you put in the field doesn't exist. Try writing it again or make sure that the image is in the same path as this program")
         progressbar.place_forget()
+        cred.place(x=300, y=340, anchor="center")
+        btn.place(x=300, y=300, anchor="center")
     size = im.size
     print("Width:", size[0])
     print("Height:", size[1])

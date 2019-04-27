@@ -8,7 +8,17 @@ from math import *
 from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import *
+from datetime import datetime
 def on_button():
+    now = datetime.now()
+    try:
+        fh = open("log.txt", "r")
+        log = open("log.txt", "a+")
+    except:
+        log = open("log.txt", "w+")
+        log.write("Start Of The Log History:")
+        log.close()
+        log = open("log.txt", "a+")
     progressbar.place(x=300, y=215, anchor="center")
     txt.config(state=DISABLED)
     cred.config(state=DISABLED)
@@ -25,15 +35,26 @@ def on_button():
     ws1.title = image
     print("")
     try:
+        now = datetime.now()
         im = PIL.Image.open(image)
         rgb_im = im.convert('RGB')
+        log.write(str(now))
+        log.write(": File Name: ")
+        log.write(image)
+        log.write("\n")
+        log.write(str(now))
+        log.write(": File Opened Succesfully \n")
     except:
+        now = datetime.now()
         messagebox.showerror("Error", "It seems like the image name you put in the field doesn't exist. Try writing it again or make sure that the image is in the same path as this program")
         progressbar.pack_forget()
         cred.config(state=NORMAL)
         btn.config(state=NORMAL)
         quitter.config(state=NORMAL)
         txt.config(state=NORMAL)
+        log.write(str(now))
+        log.write(": Error Opening File \n")
+        log.close()
     size = im.size
     print("Width:", size[0])
     print("Height:", size[1])
@@ -58,6 +79,9 @@ def on_button():
             x = x + 1
         x = 0
         y = y + 1
+    now = datetime.now()
+    log.write(str(now))
+    log.write(": Image's pixel color analized succesfully \n")
     print("")
     print("The image contains", nPixel, "pixels")
     print("")
@@ -97,16 +121,23 @@ def on_button():
         currentValue = nPixel
         progressbar["value"] = (maxValue - (maxValue - i3))
         progressbar.update()
+    now = datetime.now()
+    log.write(str(now))
+    log.write(": Cells Styled Succesfully \n")
     print("")
     print("Process Completed!")
     print("")
+    now = datetime.now()
+    log.write(str(now))
+    log.write(": Process Completed \n")
     messagebox.showinfo("OK!", "Process completed, the file was saved with a 'xlsx' extension")
     wb.save(file)
-    progressbar.pack_forget()
+    progressbar.place_forget()
     cred.config(state=NORMAL)
     btn.config(state=NORMAL)
     quitter.config(state=NORMAL)
     txt.config(state=NORMAL)
+    log.close()
     
 def func_start(sender):
     on_button()
@@ -124,6 +155,9 @@ def func_quitter(sender):
     f_quitter()
 
 win = Tk()
+log = open("log.txt", "a+")
+log.write("\n*******************\n")
+log.close()
 win.resizable(False, False)
 win.title("Image To Excel V1.0")
 win.geometry("600x400")

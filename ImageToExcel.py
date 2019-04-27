@@ -9,9 +9,11 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import *
 def on_button():
-    progressbar.place(x=300, y=210, anchor="center")
-    cred.place_forget()
-    btn.place_forget()
+    progressbar.place(x=300, y=215, anchor="center")
+    txt.config(state=DISABLED)
+    cred.config(state=DISABLED)
+    btn.config(state=DISABLED)
+    quitter.config(state=DISABLED)
     image = txt.get() + variable.get()
     #print(image)
     alfabeto = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
@@ -27,9 +29,11 @@ def on_button():
         rgb_im = im.convert('RGB')
     except:
         messagebox.showerror("Error", "It seems like the image name you put in the field doesn't exist. Try writing it again or make sure that the image is in the same path as this program")
-        progressbar.place_forget()
-        cred.place(x=300, y=340, anchor="center")
-        btn.place(x=300, y=300, anchor="center")
+        progressbar.pack_forget()
+        cred.config(state=NORMAL)
+        btn.config(state=NORMAL)
+        quitter.config(state=NORMAL)
+        txt.config(state=NORMAL)
     size = im.size
     print("Width:", size[0])
     print("Height:", size[1])
@@ -98,16 +102,27 @@ def on_button():
     print("")
     messagebox.showinfo("OK!", "Process completed, the file was saved with a 'xlsx' extension")
     wb.save(file)
-    progressbar.place_forget()
-    cred.place(x=300, y=340, anchor="center")
-    btn.place(x=300, y=300, anchor="center")
+    progressbar.pack_forget()
+    cred.config(state=NORMAL)
+    btn.config(state=NORMAL)
+    quitter.config(state=NORMAL)
+    txt.config(state=NORMAL)
     
-def func(sender):
+def func_start(sender):
     on_button()
+
+def cred_start(sender):
+    credits()
 
 def credits():
     messagebox.showinfo("About", "Credits: \n Matteo Leggio \n matteo.leggio@tiscali.it")
-    
+
+def f_quitter():
+    win.destroy()
+
+def func_quitter(sender):
+    f_quitter()
+
 win = Tk()
 win.resizable(False, False)
 win.title("Image To Excel V1.0")
@@ -122,12 +137,17 @@ txt = Entry(win ,width=70)
 txt.place(x=300, y=175, anchor="center")
 variable = StringVar(win)
 variable.set(".png")
-w = OptionMenu(win, variable, ".png", ".png", ".jpg", ".jpeg")
-w.place(x=545, y=175, anchor="center")
+dropdown = OptionMenu(win, variable, ".png", ".png", ".jpg", ".jpeg")
+dropdown.place(x=545, y=175, anchor="center")
 progressbar = Progressbar(win,orient="horizontal",length=300,mode="determinate")
 btn = Button(win, text="Ok", command=on_button)
-btn.place(x=300, y=300, anchor="center")
-cred = Button(win,width=8, text="About", command=credits)
-cred.place(x=300, y=340, anchor="center")
-txt.bind('<Return>', func)
+btn.place(x=300, y=260, anchor="center")
+btn.bind('<Return>', func_start)
+cred = Button(win, width=8, text="About", command=credits)
+cred.bind('<Return>', cred_start)
+cred.place(x=300, y=300, anchor="center")
+txt.bind('<Return>', func_start)
+quitter = Button(win, width=6, text = "Quit", command=f_quitter)
+quitter.place(x=300, y=340, anchor="center")
+quitter.bind('<Return>', func_quitter)
 win.mainloop()

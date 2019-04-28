@@ -47,7 +47,7 @@ def on_button():
     except:
         now = datetime.now()
         messagebox.showerror("Error", "It seems like the image name you put in the field doesn't exist. Try writing it again or make sure that the image is in the same path as this program")
-        progressbar.pack_forget()
+        progressbar.place_forget()
         cred.config(state=NORMAL)
         btn.config(state=NORMAL)
         quitter.config(state=NORMAL)
@@ -153,13 +153,22 @@ def f_quitter():
 
 def func_quitter(sender):
     f_quitter()
+    
+def on_closing():
+    log = open("log.txt", "a+")
+    now = datetime.now()
+    log.write(str(now))
+    log.write(": Program Closed Prematurely \n")
+    log.close()
+    win.destroy()
 
 win = Tk()
 log = open("log.txt", "a+")
-log.write("\n*******************\n")
+log.write("*******************\n")
 log.close()
+win.protocol("WM_DELETE_WINDOW", on_closing)
 win.resizable(False, False)
-win.title("Image To Excel V1.0")
+win.title("Image To Excel")
 win.geometry("600x400")
 lbl = Label(win, text="Image To Excel", font=("Verdana", 30, "bold"))
 lbl.place(x=300, y=25, anchor="center")
